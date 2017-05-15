@@ -44,5 +44,10 @@ W_M = create_W(M)
 W_N = create_W(N)
 
 B = dot(dot(W_M, A), W_N.T)
+#B = dot(W_M, A)
 
 print(B)
+
+sm.imsave('komprimerad.jpg', B)
+
+
