@@ -53,6 +53,26 @@ def compress_no_matrices(A):
     First we iterate vertically and split the
     picture into two parts
     """
+    A, B, C = preprocess_matrix(A)
+    
+    M = len(A[:, 0])
+    N = len(A[0, :])
+    
+    for a in range(M):
+        for b in range(N//2):
+            B[a,b] = (A[a,2*b]+A[a,2*b+1])/2
+            
+        for b in range(N//2):   
+            B[a, b + N//2] = (A[a, 2 * b] - A[a, 2 * b+1]) / 2
+    
+        
+    for a in range(N):
+        for b in range(M//2):
+            C[b,a] = (B[b*2,a] + B[b*2+1,a])/2
+        for b in range(M//2):   
+            C[b+M//2,a] = (B[b*2,a] - B[b*2+1,a])/2
+    
+    
     
     
 
@@ -84,7 +104,7 @@ def inverse_transformation(B1, B2 = None, B3 = None, B4 = None):
 
 A = sm.imread('kvinna.jpg', True)
 
-B = compress(A)
+B = compress_no_matrices(A)
 sm.imsave('compressed_full.jpg', B)
 #sm.imsave('compressed_small.jpg', B1)
 
@@ -102,3 +122,7 @@ def submatrices(B):
     B3 = B[M//2:,:N//2]
     B4 = B[M//2:,N//2:]
     return B1, B2, B3, B4
+
+
+
+
