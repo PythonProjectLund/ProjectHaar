@@ -23,7 +23,7 @@ def create_W(n):
 		i += 2
 	return W
 
-def compress(A):
+def preprocess_matrix(A):
     #cut away pixels to have even number of y and x pixels
     if len(A[:, 0]) % 2 != 0:
         A = A[1:, :]
@@ -34,7 +34,11 @@ def compress(A):
     #A är en MxN matris    
     M = len(A[:, 0])
     N = len(A[0, :])
-        
+    
+    return A, M, N
+def compress(A):
+    A, M, N = preprocess_matrix(A)
+    
     W_M = create_W(M)
     W_N = create_W(N)
     
@@ -43,6 +47,14 @@ def compress(A):
     #B1, B2, B3, B4 = 0,0,0,0#submatrices(B)
 
     return B#, B1, B2, B3, B4
+    
+def compress_no_matrices(A):
+    """
+    First we iterate vertically and split the
+    picture into two parts
+    """
+    
+    
 
 def inverse_transformation(B1, B2 = None, B3 = None, B4 = None):
     """
