@@ -97,8 +97,22 @@ sm.imsave('decompressed.jpg', A_restored)
 
 
 def submatrices(B):
+    M = len(B[:, 0])
+    N = len(B[0, :])
     B1 = B[:M//2,:N//2]
     B2 = B[:M//2,N//2:]
     B3 = B[M//2:,:N//2]
     B4 = B[M//2:,N//2:]
     return B1, B2, B3, B4
+
+B1 = compress(submatrices(B)[0])
+B2 = preprocess_matrix(submatrices(B)[1])[0]
+B3 = preprocess_matrix(submatrices(B)[2])[0]
+B4 = preprocess_matrix(submatrices(B)[3])[0]
+
+
+Q1 = np.column_stack([B1, B2])
+Q2 = np.column_stack([B3, B4])
+A2 = np.vstack([Q1, Q2])
+
+sm.imsave('doublecompressed.jpg',A2)
