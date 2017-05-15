@@ -98,11 +98,11 @@ sm.imsave('decompressed.jpg', A_restored)
 
 <<<<<<< HEAD
 def submatrices(B):
-    B_1 = B[:M//2,:N//2]
-    B_2 = B[:M//2,N//2:]
-    B_3 = B[M//2:,:N//2]
-    B_4 = B[M//2:,N//2:]
-    return B_1, B_2, B_3, B_4
+    B1 = B[:M//2,:N//2]
+    B2 = B[:M//2,N//2:]
+    B3 = B[M//2:,:N//2]
+    B4 = B[M//2:,N//2:]
+    return B1, B2, B3, B4
 =======
 
 """
