@@ -61,10 +61,9 @@ sm.imsave('komprimerad.jpg', B)
 
 print(B)
 
-def submatrices(A):
-    
-B_upleft = B[:N//2,:M//2]
-B_upright = B[N//2:,:M//2]
-B_downleft = B[:N//2,M//2:]
-B_downright = B[N//2:,M//2]
-
+def submatrices(B):
+    B_1 = B[:M//2,:N//2]
+    B_2 = B[:M//2,N//2:]
+    B_3 = B[M//2:,:N//2]
+    B_4 = B[M//2:,N//2:]
+    return B_1, B_2, B_3, B_4
