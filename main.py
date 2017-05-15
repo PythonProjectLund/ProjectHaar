@@ -54,3 +54,10 @@ y = dot(W, v)
 print(y)
 #hejsan
 #yo
+
+#jag är också med!
+
+
+
+
+
