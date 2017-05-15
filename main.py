@@ -9,56 +9,40 @@ from  pylab import *
 import scipy.misc as sm
 import scipy.sparse as sparse
 
-v = sm.imread('kvinna.jpg', True)
+A = sm.imread('kvinna.jpg', True)
 
-#cut away pixels to have even number of y and x pixels
-if len(v[:, 0]) % 2 != 0:
-    v = v[1:, :]
-
-if len(v[0, :]) % 2 != 0:
-    v = v[:, 1:]
-    
-y = len(v[:, 0])
-x = len(v[0, :])
-
-
-"""
-Algoritmen tar W*v = y.
-Vi önskar konstruera W. Första gör vi v endimensionell och sedan konstruerar
-vi en allmän W från denna längd
-"""
-
-v = v.reshape(1, -1)[0]
-
-def createW(n):
+def create_W(n):
 	W = zeros([n,n])
 	i = 0
 	for j in range(int(n/2)):
-		W[j, i] = 1/2
-		W[j, i+1] = 1/2
+		W[j, i] = 1/sqrt(2)
+		W[j, i+1] = 1/sqrt(2)
 		i += 2
 	i = 0
 	for j in range(int(n/2), n):
-		W[j, i] = -1/2
-		W[j, i+1] = 1/2
+		W[j, i] = -1/sqrt(2)
+		W[j, i+1] = 1/sqrt(2)
 		i += 2
 	return W
 
+#cut away pixels to have even number of y and x pixels
+if len(A[:, 0]) % 2 != 0:
+    A = A[1:, :]
 
-v = array([100, 200, 44, 50, 20, 20, 4, 2])
-
-W = createW(len(v))
-
-y = dot(W, v)
-
-print(y)
-#hejsan
-#yo
-
-#jag är också med!
-#tjena
+if len(A[0, :]) % 2 != 0:
+    A = A[:, 1:]
 
 
-#shhiiiiiit
+#vi sätter upp att A är en MxN matris    
+M = len(A[:, 0])
+N = len(A[0, :])
 
+#v = array([100, 200, 44, 50, 20, 20, 4, 2])
+#W = createW(len(v))
 
+W_M = create_W(M)
+W_N = create_W(N)
+
+B = dot(dot(W_M, A), W_N.T)
+
+print(B)
