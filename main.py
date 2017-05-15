@@ -102,3 +102,5 @@ def submatrices(B):
     B3 = B[M//2:,:N//2]
     B4 = B[M//2:,N//2:]
     return B1, B2, B3, B4
+
+
