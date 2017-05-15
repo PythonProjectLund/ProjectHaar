@@ -52,3 +52,4 @@ W = createW(len(v))
 y = dot(W, v)
 
 print(y)
+#hejsan
