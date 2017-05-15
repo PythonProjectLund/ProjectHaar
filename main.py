@@ -116,3 +116,4 @@ Q2 = np.column_stack([B3, B4])
 A2 = np.vstack([Q1, Q2])
 
 sm.imsave('doublecompressed.jpg',A2)
+sm.imsave('doublecompressed_free.jpg',B1)
