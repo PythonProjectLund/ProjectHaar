@@ -46,3 +46,9 @@ W_N = create_W(N)
 B = dot(dot(W_M, A), W_N.T)
 
 print(B)
+
+
+B_upleft = B[:N//2,:M//2]
+B_upright = B[N//2:,:M//2]
+B_downleft = B[:N//2,M//2:]
+B_downright = B[N//2:,M//2]
