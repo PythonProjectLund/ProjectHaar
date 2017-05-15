@@ -10,6 +10,13 @@ import scipy.misc as sm
 import scipy.sparse as sparse
 
 A = sm.imread('kvinna.jpg', True)
+#b1,b2,b3,b4
+
+
+compress(A)
+
+def compress(A):
+    submatrices()
 
 def create_W(n):
 	W = zeros([n,n])
@@ -54,7 +61,8 @@ sm.imsave('komprimerad.jpg', B)
 
 print(B)
 
-
+def submatrices(A):
+    
 B_upleft = B[:N//2,:M//2]
 B_upright = B[N//2:,:M//2]
 B_downleft = B[:N//2,M//2:]
