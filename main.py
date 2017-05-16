@@ -53,14 +53,11 @@ def compress_no_matrices(A):
     First we iterate vertically and split the
     picture into two parts
     """
-    A, B, C = preprocess_matrix(A)
-    
-    M = len(A[:, 0])
-    N = len(A[0, :])
+    A, M, N = preprocess_matrix(A)
     
     for a in range(M):
         for b in range(N//2):
-            B[a,b] = (A[a,2*b]+A[a,2*b+1])/2
+            B[a, b] = (A[a, 2 * b]+A[a,2*b+1])/2
             
         for b in range(N//2):   
             B[a, b + N//2] = (A[a, 2 * b] - A[a, 2 * b+1]) / 2
