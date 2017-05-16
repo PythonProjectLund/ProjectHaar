@@ -125,14 +125,6 @@ def submatrices(B):
     B4 = B[M//2:,N//2:]
     return B1, B2, B3, B4
 
-<<<<<<< HEAD
-
-
-
-=======
-<<<<<<< HEAD
-
-=======
 B1 = compress(submatrices(B)[0])
 B2 = preprocess_matrix(submatrices(B)[1])[0]
 B3 = preprocess_matrix(submatrices(B)[2])[0]
@@ -145,5 +137,3 @@ A2 = np.vstack([Q1, Q2])
 
 sm.imsave('doublecompressed.jpg',A2)
 sm.imsave('doublecompressed_free.jpg',B1)
->>>>>>> origin/master
->>>>>>> origin/master
