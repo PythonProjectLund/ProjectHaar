@@ -49,30 +49,31 @@ def compress(A):
     return B#, B1, B2, B3, B4
     
 def compress_no_matrices(A):
-    """
-    First we iterate vertically and split the
-    picture into two parts
-    """
+    return (compressmore(compress_Albinstyle(A)))
+    
+
+def compress_Albinstyle(A):
     A, M, N = preprocess_matrix(A)
+    B_m = zeros([M,N])
+    for x in range(M):
+        for y in range(N//2):
+            B_m[x,y]=(A[x,2*y-1]+A[x,2*y])/2
+        for y in range(N//2):
+            B_m[x,y+(N//2)]=(A[x,2*y]-A[x,2*y-1])/2
     
+    return B_m
+
+def compressmore(A):
+    A, M, N = preprocess_matrix(A)
+    B_m = zeros([M,N])
+    for y in range(N):
+        for x in range(M//2):
+            B_m[x,y]=(A[2*x-1,y]+A[2*x,y])/2
+        for x in range(M//2):
+            B_m[x+(M//2),y]=(A[2*x,y]-A[2*x-1,y])/2
     
-    """
-    for a in range(M):
-        for b in range(N//2):
-            B[a, b] = (A[a, 2 * b]+A[a,2*b+1])/2
-            
-        for b in range(N//2):   
-            B[a, b + N//2] = (A[a, 2 * b] - A[a, 2 * b+1]) / 2
-    
-        
-    for a in range(N):
-        for b in range(M//2):
-            C[b,a] = (B[b*2,a] + B[b*2+1,a])/2
-        for b in range(M//2):   
-            C[b+M//2,a] = (B[b*2,a] - B[b*2+1,a])/2
-    """
-    
-    
+    return B_m
+
     
 
 def inverse_transformation_piecewise(B1, B2, B3, B4):
@@ -116,9 +117,14 @@ def compress_levels(old, levels):
 
 
 A = sm.imread('kvinna.jpg', True)
+
+
+
+
 B = compress(A)
-#B_nomat = compress_no_matrices(A)
-#sm.imsave('compressed_nomat.jpg', B_nomat)
+
+B_nomat = compress_no_matrices(A)
+sm.imsave('compressed_nomat.jpg', B_nomat)
 sm.imsave('compressed_full.jpg', B)
 
 A_restored = inverse_transformation(B)
