@@ -10,18 +10,20 @@ import scipy.misc as sm
 import numpy as np
 
 def create_W(n):
-	W = zeros([n,n])
-	i = 0
-	for j in range(int(n/2)):
-		W[j, i] = 1/sqrt(2)
-		W[j, i+1] = 1/sqrt(2)
-		i += 2
-	i = 0
-	for j in range(int(n/2), n):
-		W[j, i] = -1/sqrt(2)
-		W[j, i+1] = 1/sqrt(2)
-		i += 2
-	return W
+    W = zeros([n,n])
+    i = 0
+    scale_factor = 1/sqrt(2) 
+    
+    for j in range(int(n/2)):
+        W[j, i] = scale_factor
+        W[j, i+1] = scale_factor
+        i += 2
+    i = 0
+    for j in range(int(n/2), n):
+        W[j, i] = -scale_factor
+        W[j, i+1] = scale_factor
+        i += 2
+    return W
 
 def preprocess_matrix(A):
     #cut away pixels to have even number of y and x pixels
@@ -31,11 +33,12 @@ def preprocess_matrix(A):
     if len(A[0, :]) % 2 != 0:
         A = A[:, 1:]
         
-    #A är en MxN matris    
+    #A är en MxN matris
     M = len(A[:, 0])
     N = len(A[0, :])
     
     return A, M, N
+
 def compress(A):
     A, M, N = preprocess_matrix(A)
     
@@ -113,8 +116,6 @@ def compress_levels(old, levels):
     
     return old
 
-
-
 A = sm.imread('kvinna.jpg', True)
 B = compress(A)
 #B_nomat = compress_no_matrices(A)
@@ -126,9 +127,56 @@ sm.imsave('decompressed_full.jpg', A_restored)
 
 B1, B2, B3, B4 = submatrices(B)
 
+
 for n in range(1, 5):
     sm.imsave('compressed_{}.jpg'.format(n), compress_levels(A, n))
 
 A_restored_piecewise = inverse_transformation_piecewise(B1, B2, B3, B4)
 
 sm.imsave('decompressed_piecewise.jpg', A_restored_piecewise)
+
+
+
+
+
+
+
+
+
+
+
+A = sm.imread('gruppen.jpg', True)
+B = compress(A)
+
+sm.imsave('1.jpg', B)
+B1, B2, B3, B4 = submatrices(B)
+#B2 *= 0
+#B3 *= 0
+#B4 *= 0
+#sm.imsave('2.jpg', inverse_transformation_piecewise(B1, B2, B3, B4))
+
+M = len(B2[:, 0])
+N = len(B2[0, :])
+
+for i in range(M):
+    for j in range(N):
+        #print(B2[i, j])
+        if abs(B2[i, j]) <= 4:
+            B2[i, j] = 0
+        if abs(B3[i, j]) <= 4:
+            B3[i, j] = 0
+"""
+M = len(B3[:, 0])
+N = len(B3[0, :])
+
+for i in range(M):
+    for j in range(N):
+        #print(B2[i, j])
+"""        
+              
+
+sm.imsave('gruppen_lossy.jpg', inverse_transformation_piecewise(B1, B2, B3, B4))
+
+sm.imsave('gruppen_lossless.jpg', inverse_transformation(compress(A)))
+
+
