@@ -50,14 +50,7 @@ def compress(A):
     return B
     
 def compress_no_matrices(A):
-<<<<<<< Updated upstream
     return (compressmore(compress_Albinstyle(A)))
-=======
-    """
-    First we iterate vertically and split the
-    picture into two parts
-    """
->>>>>>> Stashed changes
     
 
 def compress_Albinstyle(A):
@@ -162,29 +155,6 @@ A_restored = inverse_transformation(B)
 sm.imsave('decompressed_full.jpg', A_restored)
 
 B1, B2, B3, B4 = submatrices(B)
-
-    A, B, C = preprocess_matrix(A)
-    
-    M = len(A[:, 0])
-    N = len(A[0, :])
-    
-    for a in range(M):
-        for b in range(N//2):
-            B[a,b] = (A[a,2*b]+A[a,2*b+1])/2
-            
-        for b in range(N//2):   
-            B[a, b + N//2] = (A[a, 2 * b] - A[a, 2 * b+1]) / 2
-    
-        
-    for a in range(N):
-        for b in range(M//2):
-            C[b,a] = (B[b*2,a] + B[b*2+1,a])/2
-        for b in range(M//2):   
-            C[b+M//2,a] = (B[b*2,a] - B[b*2+1,a])/2
-    
-    
-    
-
 
 
 for n in range(1, 5):
