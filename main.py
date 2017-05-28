@@ -8,11 +8,12 @@ from  scipy import *
 from  pylab import *
 import scipy.misc as sm
 import numpy as np
+import time
 
 def create_W(n):
     W = zeros([n,n])
     i = 0
-    scale_factor = 1/2#1/sqrt(2) 
+    scale_factor = 1/sqrt(2) 
     
     for j in range(int(n/2)):
         W[j, i] = scale_factor
@@ -52,7 +53,6 @@ def compress(A):
 def compress_no_matrices(A):
     return (compressmore(compress_Albinstyle(A)))
     
-
 def compress_Albinstyle(A):
     A, M, N = preprocess_matrix(A)
     B_m = zeros([M,N])
@@ -75,12 +75,14 @@ def compressmore(A):
     
     return B_m
 
-    
-
-def inverse_transformation_piecewise(B1, B2, B3, B4):
+def merge_submatrices(B1, B2, B3, B4):
     Q1 = np.column_stack([B1, B2])
     Q2 = np.column_stack([B3, B4])
-    return inverse_transformation(np.vstack([Q1, Q2]))
+    
+    return np.vstack([Q1, Q2])
+
+def inverse_transformation_piecewise(B1, B2, B3, B4):
+    return inverse_transformation(merge_submatrices(B1, B2, B3, B4))
 
 def inverse_transformation(B):
     """
@@ -142,12 +144,18 @@ def lossy_submatrix_compression(A, threshold):
 """
 A = sm.imread('kvinna.jpg', True)
 
-
-
-
+time1 = time.time()
 B = compress(A)
+time2 = time.time()
 
+time3 = time.time()
 B_nomat = compress_no_matrices(A)
+time4 = time.time()
+
+print('Matrix multiplication: {}'.format(time2 - time1))
+print('No matrices: {}'.format(time4 - time3))
+print('Time ration: {}'.format((time4 - time3) / (time2 - time1)))
+
 sm.imsave('compressed_nomat.jpg', B_nomat)
 sm.imsave('compressed_full.jpg', B)
 
@@ -167,37 +175,35 @@ sm.imsave('decompressed_piecewise.jpg', A_restored_piecewise)
 
 
 
-
 """
     Gruppen
 """
 A = sm.imread('gruppen.jpg', True)
-B = compress(A)
+B = compress(A)     
 
-
-B1, B2, B3, B4 = submatrices(B)
-
-M = len(B2[:, 0])
-N = len(B2[0, :])
-
-for i in range(M):
-    for j in range(N):
-        #print(B2[i, j])
-        if abs(B2[i, j]) <= 4:
-            B2[i, j] = 0
-        if abs(B3[i, j]) <= 4:
-            B3[i, j] = 0              
-
-sm.imsave('gruppen_lossy.jpg', inverse_transformation_piecewise(B1, B2, B3, B4))
+B1, B2, B3, B4 = lossy_submatrix_compression(compress(sm.imread('kvinna.jpg', True)), 50)
+sm.imsave('kvinna_lossy_noinverse.jpg', merge_submatrices(B1, B2, B3, B4))
+sm.imsave('kvinna_lossy.jpg', inverse_transformation_piecewise(B1, B2, B3, B4))
 
 sm.imsave('gruppen_lossless.jpg', inverse_transformation(compress(A)))
 
 
-#downscaled + lossy:
 B = compress_levels(A, 2)
 B_temp = compress(B)
 B1, B2, B3, B4 = lossy_submatrix_compression(B_temp, 1)
 
-sm.imsave('gruppen_downscaled_lossy.jpg', inverse_transformation_piecewise(B1, B2, B3, B4))
+C = inverse_transformation_piecewise(B1, B2, B3, B4)
+sm.imsave('gruppen_downscaled_lossy.jpg', C)
+sm.imsave('gruppen_downscaled_lossy_compressed.jpg', compress(C))
+
+
+
+
+
+
+
+
+
+
 
 
