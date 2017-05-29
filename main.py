@@ -154,7 +154,7 @@ def lossy_submatrix_compression(A, threshold):
                 x += 1
             else:
                 y += 1
-            if abs(A3[i, j]) <= threshold:
+            if abs(A4[i, j]) <= threshold:
                 A4[i, j] = 0
                 x += 1
             else:
