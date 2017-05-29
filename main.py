@@ -116,7 +116,7 @@ def submatrices(B):
 
 def compress_levels(old, levels):
     """
-    Takes an array and compresses it "levels" times, discarding delta
+    Takes an array and compresses it "levels" times, discarding deltas
     """
     for i in range(levels):
         old = submatrices(compress(old))[0]
@@ -129,21 +129,96 @@ def lossy_submatrix_compression(A, threshold):
     M = len(A2[:, 0])
     N = len(A2[0, :])
     
+    x = 0
+    y = 0
+    
     for i in range(M):
         for j in range(N):
             if abs(A2[i, j]) <= threshold:
                 A2[i, j] = 0
+                x += 1
+            else:
+                y += 1
             if abs(A3[i, j]) <= threshold:
                 A3[i, j] = 0
+                x += 1
+            else:
+                y += 1
+                
+    print(x)
+    print(y)
     return A1, A2, A3, A4
 
 
+ran = rand(500, 500)
+sm.imsave('random.jpg', ran)
+sm.imsave('dark.jpg',   zeros([500, 500]))
+crand = compress(ran)
+sm.imsave('random_comp.jpg', crand)
+crand2 = compress(crand)
+sm.imsave('random_comp2.jpg', compress(crand2))
+sm.imsave('random_a_res.jpg', inverse_transformation(inverse_transformation(crand2)))
+
+
 
 """
-    Kvinna och tillhörande
+A0 = sm.imread('gruppen.jpg', True)
+A1 = compress(A0)
+sm.imsave('A1.jpg', A1)
+A2 = compress(A1)
+sm.imsave('A2.jpg', A2)
+A3 = compress(A2)
+sm.imsave('A3.jpg', A3)
+A4 = compress(A3)
+sm.imsave('A4.jpg', A4)
+A5 = compress(A4)
+sm.imsave('A5.jpg', A5)
+A6 = compress(A5)
+sm.imsave('A6.jpg', A6)
+A7 = compress(A6)
+sm.imsave('A7.jpg', A7)
+A8 = compress(A7)
+sm.imsave('A8.jpg', A8)
 """
-A = sm.imread('kvinna.jpg', True)
+"""
 
+xs = []
+ys = []
+
+xs2 = []
+ys2 = []
+for n in range(1, 100):
+    ran = []
+    for i in range(30):
+        ran.append(rand(n*10, n*10))
+    
+    res = []
+    
+    time1 = time.time()
+    for i in range(30):
+        res.append(compress(ran[i]))
+    time2 = time.time()
+    #ys.append((time2 - time1)*1000/40)
+    #xs.append(n*10)
+
+    time3 = time.time()
+    for i in range(30):
+        inverse_transformation(res[i])
+    time4 = time.time()
+    ys.append((time4 - time3)*1000/30)
+    xs.append(n*10)   
+
+
+
+plot(xs, ys)
+title('Decompression (matrix)')
+xlabel('Image size')
+ylabel('Compress time (ms)')
+
+"""
+
+
+"""
 time1 = time.time()
 B = compress(A)
 time2 = time.time()
@@ -171,12 +246,14 @@ for n in range(1, 5):
 A_restored_piecewise = inverse_transformation_piecewise(B1, B2, B3, B4)
 
 sm.imsave('decompressed_piecewise.jpg', A_restored_piecewise)
-
+"""
 
 
 
 """
     Gruppen
+"""
+
 """
 A = sm.imread('gruppen.jpg', True)
 B = compress(A)     
@@ -195,7 +272,7 @@ B1, B2, B3, B4 = lossy_submatrix_compression(B_temp, 1)
 C = inverse_transformation_piecewise(B1, B2, B3, B4)
 sm.imsave('gruppen_downscaled_lossy.jpg', C)
 sm.imsave('gruppen_downscaled_lossy_compressed.jpg', compress(C))
-
+"""
 
 
 
