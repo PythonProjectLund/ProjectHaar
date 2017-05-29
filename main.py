@@ -132,8 +132,18 @@ def lossy_submatrix_compression(A, threshold):
     x = 0
     y = 0
     
+    o = 0
+    p = 0
+    
     for i in range(M):
         for j in range(N):
+            #no pixels are zero, those who represent black are something
+            #along the lines of 1.e-16 so we count how many of those there
+            #are to accurately measure what effect the filter has
+            if abs(A2[i, j]) < 0.000001 and A2[i, j] != 0:
+                o += 1
+            else:
+                p += 1
             if abs(A2[i, j]) <= threshold:
                 A2[i, j] = 0
                 x += 1
@@ -144,12 +154,30 @@ def lossy_submatrix_compression(A, threshold):
                 x += 1
             else:
                 y += 1
-                
+            if abs(A3[i, j]) <= threshold:
+                A4[i, j] = 0
+                x += 1
+            else:
+                y += 1
+            
+    print(o)
+    print(p)
     print(x)
     print(y)
+    
     return A1, A2, A3, A4
 
+A = compress(sm.imread('kvinna.jpg', True))
 
+B1, B2, B3, B4 = lossy_submatrix_compression(A, 20)
+B = merge_submatrices(B1, B2, B3, B4)
+
+sm.imsave('xxx.jpg', B)
+sm.imsave('yyy.jpg', inverse_transformation(B))
+
+
+
+#Random and dark
 ran = rand(500, 500)
 sm.imsave('random.jpg', ran)
 sm.imsave('dark.jpg',   zeros([500, 500]))
@@ -161,7 +189,6 @@ sm.imsave('random_a_res.jpg', inverse_transformation(inverse_transformation(cran
 
 
 
-"""
 A0 = sm.imread('gruppen.jpg', True)
 A1 = compress(A0)
 sm.imsave('A1.jpg', A1)
@@ -179,8 +206,9 @@ A7 = compress(A6)
 sm.imsave('A7.jpg', A7)
 A8 = compress(A7)
 sm.imsave('A8.jpg', A8)
+
 """
-"""
+PLOTTING
 
 xs = []
 ys = []
@@ -218,7 +246,6 @@ ylabel('Compress time (ms)')
 """
 
 
-"""
 time1 = time.time()
 B = compress(A)
 time2 = time.time()
@@ -246,7 +273,6 @@ for n in range(1, 5):
 A_restored_piecewise = inverse_transformation_piecewise(B1, B2, B3, B4)
 
 sm.imsave('decompressed_piecewise.jpg', A_restored_piecewise)
-"""
 
 
 
@@ -254,7 +280,6 @@ sm.imsave('decompressed_piecewise.jpg', A_restored_piecewise)
     Gruppen
 """
 
-"""
 A = sm.imread('gruppen.jpg', True)
 B = compress(A)     
 
@@ -272,15 +297,5 @@ B1, B2, B3, B4 = lossy_submatrix_compression(B_temp, 1)
 C = inverse_transformation_piecewise(B1, B2, B3, B4)
 sm.imsave('gruppen_downscaled_lossy.jpg', C)
 sm.imsave('gruppen_downscaled_lossy_compressed.jpg', compress(C))
-"""
-
-
-
-
-
-
-
-
-
 
 
